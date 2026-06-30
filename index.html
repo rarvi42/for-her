@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I'm Sorry</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap');
+
+  :root{
+    --cream:#f6f1ea;
+    --ink:#2b2420;
+    --rose:#b5685a;
+    --soft:#8a7d72;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow:hidden;
+  }
+
+  .screen{
+    max-width:560px;
+    width:100%;
+    text-align:center;
+    display:none;
+  }
+
+  .screen.active{
+    display:block;
+    animation:rise 0.9s ease forwards;
+  }
+
+  @keyframes rise{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .eyebrow{
+    font-size:0.75rem;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--soft);
+    margin-bottom:18px;
+  }
+
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(2rem, 6vw, 3.2rem);
+    line-height:1.15;
+    margin-bottom:24px;
+  }
+
+  h1 em{ color:var(--rose); font-style:italic; }
+
+  .message{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:clamp(1.1rem, 3vw, 1.35rem);
+    line-height:1.75;
+    color:#4a4038;
+    margin-bottom:36px;
+    text-align:left;
+  }
+
+  .signature{
+    font-size:0.9rem;
+    color:var(--soft);
+    letter-spacing:0.05em;
+    margin-bottom:36px;
+  }
+
+  .divider{
+    width:48px;
+    height:1px;
+    background:var(--rose);
+    margin:28px auto;
+    opacity:0.6;
+  }
+
+  button{
+    font-family:'Inter', sans-serif;
+    border:none;
+    cursor:pointer;
+    border-radius:999px;
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .btn-main{
+    background:var(--rose);
+    color:#fff;
+    padding:16px 38px;
+    font-size:1rem;
+    letter-spacing:0.03em;
+    box-shadow:0 8px 24px rgba(181,104,90,0.35);
+  }
+
+  .btn-main:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(181,104,90,0.45); }
+
+  .choice-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+
+  .btn-yes{
+    background:var(--rose);
+    color:#fff;
+    padding:14px 30px;
+    font-weight:500;
+    box-shadow:0 8px 24px rgba(181,104,90,0.35);
+  }
+
+  .btn-no{
+    background:transparent;
+    color:var(--soft);
+    border:1px solid #d8cfc3;
+    padding:14px 30px;
+  }
+
+  .btn-no:hover{ background:#efe8dd; }
+
+  .heart{
+    width:20px;
+    height:20px;
+    display:inline-block;
+    margin-top:6px;
+    animation:beat 1.6s ease-in-out infinite;
+  }
+
+  @keyframes beat{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.15);}
+  }
+
+  .nudge{
+    font-size:0.85rem;
+    color:var(--soft);
+    margin-top:18px;
+    min-height:1.2em;
+  }
+</style>
+</head>
+<body>
+
+  <!-- SCREEN 0: opening -->
+  <div class="screen active" id="screen0">
+    <div class="eyebrow">for you</div>
+    <h1>I want to say<br>you <em>something</em></h1>
+    <p class="message" style="text-align:center;">Please click below to know what I think.</p>
+    <button class="btn-main" onclick="goTo(1)">Click here</button>
+  </div>
+
+  <!-- SCREEN 1: the apology paragraph -->
+  <div class="screen" id="screen1">
+    <div class="eyebrow">what I think</div>
+    <h1>I'm <em>sorry</em></h1>
+
+    <!-- ====== EDIT YOUR MESSAGE HERE ====== -->
+    <p class="message">
+      Replace this paragraph with what you're sorry for. Speak plainly:
+      say what happened, how it made her feel, and what you'll do
+      differently. Look for this comment in the code to edit it.
+    </p>
+    <!-- ===================================== -->
+
+    <button class="btn-main" onclick="goTo(2)">Next</button>
+  </div>
+
+  <!-- SCREEN 2: forgive yes/no -->
+  <div class="screen" id="screen2">
+    <div class="eyebrow">one question</div>
+    <h1>Do you <em>forgive</em> me?</h1>
+
+    <div class="choice-row">
+      <button class="btn-yes" id="yesBtn" onclick="goTo(3)">Yes</button>
+      <button class="btn-no" id="noBtn" onclick="pressNo()">No</button>
+    </div>
+    <p class="nudge" id="nudge"></p>
+  </div>
+
+  <!-- SCREEN 3: final message -->
+  <div class="screen" id="screen3">
+    <div class="eyebrow">finally</div>
+    <h1>Thank <em>you</em></h1>
+
+    <!-- ====== EDIT YOUR FINAL MESSAGE HERE ====== -->
+    <p class="message">
+      Replace this with the message you were dying to tell her —
+      the real one. This is the payoff screen, so make it count.
+    </p>
+    <!-- ============================================ -->
+
+    <p class="signature">— yours, always</p>
+
+    <svg class="heart" viewBox="0 0 24 24" fill="#b5685a">
+      <path d="M12 21s-7.5-4.6-10-9.3C0.3 8.3 2 4.5 5.8 4c2-0.3 3.8 0.7 4.7 2.3C11.4 4.7 13.2 3.7 15.2 4c3.8 0.5 5.5 4.3 3.8 7.7C19.5 16.4 12 21 12 21z"/>
+    </svg>
+  </div>
+
+  <script>
+    const nudges = [
+      "Are you sure? Take another look at that Yes button...",
+      "It's getting harder to say no, isn't it?",
+      "Come on, just click Yes already.",
+      "The No button is shrinking for a reason...",
+      "Yes is right there, waiting for you."
+    ];
+    let noCount = 0;
+
+    function goTo(n){
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen' + n).classList.add('active');
+    }
+
+    function pressNo(){
+      noCount++;
+      const yesBtn = document.getElementById('yesBtn');
+      const noBtn = document.getElementById('noBtn');
+      const nudge = document.getElementById('nudge');
+
+      const yesScale = Math.min(1 + noCount * 0.25, 3);
+      const noScale = Math.max(1 - noCount * 0.15, 0.35);
+
+      yesBtn.style.transform = `scale(${yesScale})`;
+      noBtn.style.transform = `scale(${noScale})`;
+      noBtn.style.opacity = Math.max(1 - noCount * 0.15, 0.3);
+
+      nudge.textContent = nudges[Math.min(noCount - 1, nudges.length - 1)];
+
+      // once the No button gets tiny enough, it just stops responding usefully
+      if(noScale <= 0.4){
+        noBtn.style.pointerEvents = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>
